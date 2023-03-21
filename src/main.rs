@@ -1,7 +1,7 @@
 use wry::{
     application::{
         event::{Event, StartCause, WindowEvent},
-        event_loop::{ControlFlow, EventLoop, EventLoopClosed},
+        event_loop::{ControlFlow, EventLoop},
         window::WindowBuilder,
     },
     webview::WebViewBuilder,
@@ -9,14 +9,14 @@ use wry::{
 
 use std::env;
 use std::process::Command;
-use std::{thread, time};
+use std::thread;
 
 fn main() -> wry::Result<()> {
     // println!(
     //     "input the Pluto notebook secret as the first arg to this program, if necessary...\n\n"
     // );
 
-    let julia_handler = thread::spawn(|| {
+    let _julia_handler = thread::spawn(|| {
         Command::new("julia")
             // .env("JULIA_DIR", "~/.juliaup/bin/")
             // .env("LD_LIBRARY_PATH", "~/.julia/juliaup/julia-1.8.5+0.x64.linux.gnu/lib/")
@@ -27,8 +27,6 @@ fn main() -> wry::Result<()> {
             // .output()
             .expect("could not start Pluto server... Make sure Pluto is properly installed..");
     });
-
-    // thread::sleep(time::Duration::from_secs(7));
 
     let mut base_url = String::from("http://127.0.0.1:1234/");
 
@@ -66,8 +64,9 @@ fn main() -> wry::Result<()> {
                 ..
             } => {
                 println!("Close Julia process!!");
+
                 // DOES NOT WORK!!!
-                // julia_handler
+                // _julia_handler
                 //     .join()
                 //     .expect("Couldn't finish Julia / Pluto");
                 *control_flow = ControlFlow::Exit;
