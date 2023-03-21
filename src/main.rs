@@ -46,15 +46,7 @@ fn main() -> wry::Result<()> {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
-                println!("Close Julia process!!");
-
-                // DOES NOT WORK!!!
-                // _julia_handler
-                //     .join()
-                //     .expect("Couldn't finish Julia / Pluto");
-                *control_flow = ControlFlow::ExitWithCode(1);
-
-                // *control_flow = ControlFlow::Exit;
+                *control_flow = ControlFlow::Exit;
             }
             _ => (),
         }
