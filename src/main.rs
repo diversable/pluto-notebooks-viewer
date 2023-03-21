@@ -27,7 +27,7 @@ fn main() -> wry::Result<()> {
 
     let _start_pluto = thread::sleep(time::Duration::from_secs(5));
 
-    let mut base_url = String::from("http://127.0.0.1:1234/");
+    let base_url = String::from("http://127.0.0.1:1234/");
 
     // Start the UI
     let mut event_loop = EventLoop::new();
