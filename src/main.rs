@@ -1,7 +1,7 @@
 use wry::{
     application::{
         event::{Event, StartCause, WindowEvent},
-        event_loop::{ControlFlow, EventLoop},
+        event_loop::{ControlFlow, EventLoop, EventLoopClosed},
         window::WindowBuilder,
     },
     webview::WebViewBuilder,
@@ -16,22 +16,21 @@ fn main() -> wry::Result<()> {
     //     "input the Pluto notebook secret as the first arg to this program, if necessary...\n\n"
     // );
 
-    let thread_handler = thread::spawn(|| {
+    let julia_handler = thread::spawn(|| {
         Command::new("julia")
             // .env("JULIA_DIR", "~/.juliaup/bin/")
             // .env("LD_LIBRARY_PATH", "~/.julia/juliaup/julia-1.8.5+0.x64.linux.gnu/lib/")
             .env("JULIA_NUM_THREADS", "16")
             .arg("-E")
             .arg("using Pluto; Pluto.run()")
-            // .status()
-            .output()
+            .status()
+            // .output()
             .expect("could not start Pluto server... Make sure Pluto is properly installed..");
     });
 
-    thread::sleep(time::Duration::from_secs(7));
-    // thread_handler.join().unwrap();
+    // thread::sleep(time::Duration::from_secs(7));
 
-    let mut base_url = String::from("http://0.0.0.0:1234/");
+    let mut base_url = String::from("http://127.0.0.1:1234/");
 
     let args: Vec<String> = env::args().collect();
 
@@ -52,10 +51,10 @@ fn main() -> wry::Result<()> {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title("Pluto Notebooks")
-        // .with_fullscreen(fullscreen)
-        // .with_menu(menu)
         .build(&event_loop)?;
     let _webview = WebViewBuilder::new(window)?.with_url(&base_url)?.build()?;
+
+    // julia_handler.join().unwrap();
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -66,10 +65,11 @@ fn main() -> wry::Result<()> {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
-                // thread_handler
+                println!("Close Julia process!!");
+                // DOES NOT WORK!!!
+                // julia_handler
                 //     .join()
                 //     .expect("Couldn't finish Julia / Pluto");
-
                 *control_flow = ControlFlow::Exit;
             }
             _ => (),
