@@ -33,16 +33,16 @@ pub fn run() -> PlutoResult<()> {
     let base_url = String::from("http://127.0.0.1:1234/");
 
     let mut main_menu = MenuBar::new();
+
     let mut file_menu = MenuBar::new();
 
-    // let menu_type = MenuType::MenuBar;
-    // let close_window = MenuItem::CloseWindow;
-    // let close_id = MenuId::new("exit");
-
-    // let itm = file_menu.add_item(MenuItemAttributes::new("Exit"));
+    // Bug!?! Cannot create new menu item - gives error:
+    // """
+    // thread 'main' panicked at 'GTK has not been initialized. Call `gtk::init` first.', ~/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.16.2/src/auto/menu_item.rs:56:9
+    // """
+    let itm = file_menu.add_item(MenuItemAttributes::new("Exit"));
     // dbg!(itm);
 
-    // file_menu.add_item(close_window);
     main_menu.add_submenu("File", true, file_menu);
 
     // Start the UI
