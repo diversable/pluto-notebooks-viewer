@@ -40,7 +40,7 @@ pub fn run() -> PlutoResult<()> {
     // """
     // thread 'main' panicked at 'GTK has not been initialized. Call `gtk::init` first.', ~/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.16.2/src/auto/menu_item.rs:56:9
     // """
-    let itm = file_menu.add_item(MenuItemAttributes::new("Exit"));
+    // let itm = file_menu.add_item(MenuItemAttributes::new("Exit"));
     // dbg!(itm);
 
     main_menu.add_submenu("File", true, file_menu);
