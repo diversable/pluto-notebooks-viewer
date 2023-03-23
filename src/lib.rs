@@ -33,16 +33,15 @@ pub fn run() -> PlutoResult<()> {
     let base_url = String::from("http://127.0.0.1:1234/");
 
     let mut main_menu = MenuBar::new();
-
     let mut file_menu = MenuBar::new();
 
     // let menu_type = MenuType::MenuBar;
     // let close_window = MenuItem::CloseWindow;
     // let close_id = MenuId::new("exit");
 
-    // let itm = MenuItemAttributes::new("Exit");
+    // let itm = file_menu.add_item(MenuItemAttributes::new("Exit"));
+    // dbg!(itm);
 
-    // file_menu.add_item(itm);
     // file_menu.add_item(close_window);
     main_menu.add_submenu("File", true, file_menu);
 
