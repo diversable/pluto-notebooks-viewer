@@ -2,6 +2,7 @@ use wry::{
     application::{
         event::{Event, StartCause, WindowEvent},
         event_loop::{ControlFlow, EventLoop},
+        menu::{MenuBar, MenuId, MenuItem, MenuItemAttributes, MenuType},
         platform::run_return::EventLoopExtRunReturn,
         window::WindowBuilder,
     },
@@ -17,6 +18,7 @@ use std::error::Error;
 type PlutoResult<T> = Result<T, Box<dyn Error>>;
 
 pub fn run() -> PlutoResult<()> {
+    // TODO: check if Pluto is installed first before attempting to run it...
     let julia_handler = thread::spawn(|| {
         Command::new("julia")
             .arg("-E")
@@ -30,12 +32,36 @@ pub fn run() -> PlutoResult<()> {
 
     let base_url = String::from("http://127.0.0.1:1234/");
 
+    let mut main_menu = MenuBar::new();
+
+    let mut file_menu = MenuBar::new();
+
+    // let menu_type = MenuType::MenuBar;
+    // let close_window = MenuItem::CloseWindow;
+    // let close_id = MenuId::new("exit");
+
+    // let itm = MenuItemAttributes::new("Exit");
+
+    // file_menu.add_item(itm);
+    // file_menu.add_item(close_window);
+    main_menu.add_submenu("File", true, file_menu);
+
     // Start the UI
     let mut event_loop = EventLoop::new();
+
     let window = WindowBuilder::new()
         .with_title("Pluto Notebooks")
+        .with_closable(true)
+        // .with_window_icon(window_icon)
+        // Start with window maximized
+        .with_maximized(true)
+        .with_menu(main_menu)
         .build(&event_loop)?;
-    let _webview = WebViewBuilder::new(window)?.with_url(&base_url)?.build()?;
+
+    let _webview = WebViewBuilder::new(window)?
+        .with_url(&base_url)?
+        .with_devtools(true)
+        .build()?;
 
     // use the `run_return` method instead of simply `run` so that you can re-join the julia handler thread / clean up before the program exits..
     event_loop.run_return(move |event, _, control_flow| {
